@@ -1,0 +1,36 @@
+"""
+Created on Tue Aug 22 04:10:11 2023
+
+@author: Eman's PC
+"""
+
+{
+  "title": "event-schema",
+  "type": "object",
+  "properties": {
+      "event_type": {
+          "type": "string"
+      },  
+      "username": {
+        "type": "string"
+      },
+      "entitytype": {
+        "type": "string"
+      },
+      "ip": {
+        "type": "string"
+      },
+      "location": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "event_specificdetails": {
+        "type": "object",
+        "additionalProperties": true
+      }
+  },
+  "additionalProperties": false,  
+  "required": ["event_type", "username", "entitytype", "ip", "location", "description"]
+}
