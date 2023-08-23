@@ -1,20 +1,16 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Aug 10 14:58:30 2023
+Created on Tue Aug 16 13:05:56 2023
 
-@author: Eman's PC
+@author: Emaan Shahzad
 """
 
 # Libraries
-import os, jwt, json 
-from functools import wraps
+import jwt 
 from datetime import datetime, timedelta
-from jwt.exceptions import ExpiredSignatureError
-from flask import jsonify, request, session, make_response
+from flask import jsonify, request, make_response 
 
 # Login endpoint
-def authenticate(app):
-
+def SignIn(app):
     @app.route('/login', methods=['POST'])
     def login():
         try:
