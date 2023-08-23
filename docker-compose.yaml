@@ -1,17 +1,27 @@
+#This YAML file defines a Docker Compose service for the API. It does the following:
+
+#Specifies the auditapi service, which is built from the current directory using the Dockerfile.
+
+#Maps port 8080 from the container to port 8080 on the host machine.
+
+#Specifies an environment file (.env) to load environment variables.
+
+#Defines a volume to store MongoDB data
+
 version: '3'
 services:
   # The API uses the Flask framework to receive and manage GET and POST requests
-  api:
+  auditapi:
     build:
       context: .  # Context points to the directory containing your application code
-      dockerfile: dockerfilerun  # Dockerfile for building the API service
+      dockerfile: Dockerfile  # Dockerfile for building the API service
     ports:
-      - 5000:5000
-    environment:
-      - SECRET_KEY=YourNewSecretKey  # Update this with your new secret key
-      - USER=myuser
-      - PASS=mypass
-      - MONGODBATLAS_HOST=mongodb+srv://shahzademan:gUU9PfKsz1j8w5PY@cluster0.pzaaftb.mongodb.net/?retryWrites=true&w=majority  # Your updated MongoDB URI
+      - 8080:8080
+    env_file:   
+      - .env   # Path to your .env file
+    volumes:
+      - mongodb_data:/path/to/mongodb/data  # Configure this to your actual data path
 
 volumes:
-  mongodb:
+  mongodb_data:  # The volume that will be created and synced with the host machine
+  
