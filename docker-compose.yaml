@@ -1,0 +1,17 @@
+version: '3'
+services:
+  # The API uses the Flask framework to receive and manage GET and POST requests
+  api:
+    build:
+      context: .  # Context points to the directory containing your application code
+      dockerfile: dockerfilerun  # Dockerfile for building the API service
+    ports:
+      - 5000:5000
+    environment:
+      - SECRET_KEY=YourNewSecretKey  # Update this with your new secret key
+      - USER=myuser
+      - PASS=mypass
+      - MONGODBATLAS_HOST=mongodb+srv://shahzademan:gUU9PfKsz1j8w5PY@cluster0.pzaaftb.mongodb.net/?retryWrites=true&w=majority  # Your updated MongoDB URI
+
+volumes:
+  mongodb:
