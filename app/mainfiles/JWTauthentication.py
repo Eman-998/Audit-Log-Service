@@ -1,10 +1,19 @@
 """
 Created on Tue Aug 21 16:08:56 2023
 
-@author: Eman's PC
+Description: 
+    The function acts as a middleware and defines a decorator generator for JWT-based authentication in Python.
+    The decorator enforces JSON Web Token (JWT) authentication on Flask routes. When used on a route, it intercepts
+    requests, validates the token, and provides user information to the route handler through the 'user_id' argument
+
+Returns:
+    function: A decorated route function that requires a valid JWT token for access.
+    
+Raises:
+    401 Unauthorized: If the JWT token is missing or invalid.
+    500 Internal Server Error: If there's an unexpected error during token decoding.
+
 """
-
-
 # Libraries
 import jwt 
 from functools import wraps
@@ -18,7 +27,7 @@ def JWTtoken():
     def decorator(func):
         @wraps(func)
         def decorated(*args, **kwargs):
-            app = current_app  # Get the current Flask application instance
+            app = current_app 
 
             token = None
             # Check if the Authorization header is present and extract it
@@ -28,7 +37,7 @@ def JWTtoken():
                     token = auth_header[7:].strip()
 
             if not token:
-                return make_response('Unauthorized: Token is missing', 403)
+                return make_response('Unauthorized: Token is missing', 401)
             try:
                 payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
 
@@ -39,14 +48,14 @@ def JWTtoken():
                 if expiration_timestamp < datetime.utcnow().timestamp():
                     raise ExpiredSignatureError
                 
-                # Pass the user ID as an argument to the endpoint function
                 kwargs['user_id'] = payload['user']
 
             except ExpiredSignatureError:
-                return make_response('Unauthorized: Token expired', 403)
+                return make_response('Unauthorized: Token expired', 401)
             except:
-                return make_response('Unauthorized: Invalid Token', 403)
+                return make_response('Unauthorized: Invalid Token', 401)
             
             return func(*args, **kwargs)
         return decorated
     return decorator
+
