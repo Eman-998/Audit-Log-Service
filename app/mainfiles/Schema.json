@@ -1,9 +1,3 @@
-"""
-Created on Tue Aug 22 04:10:11 2023
-
-@author: Eman's PC
-"""
-
 {
   "title": "event-schema",
   "type": "object",
