@@ -34,9 +34,9 @@ from flask import jsonify, request, make_response
 # Define a route for user login.
 def SignIn(app):
     @app.route('/login', methods=['POST'])
+    #login()` that handles user login and JWTtoken generation.
     def login():
-        # The code block you provided is a function called `login()` that handles user login and JWT
-        # token generation. Here's a breakdown of what it does:
+        
         try:
             infos = request.get_json()
 
