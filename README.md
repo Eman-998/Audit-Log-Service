@@ -129,6 +129,8 @@ To run this project , the following is required:
 1.Docker Desktop: Docker Desktop is required to build and run the Docker container that encapsulates your application and its dependencies.
 
 2.Python ( version 3.x or later): Python is needed to execute the project code, particularly when running and testing the application locally.
+
+3. Create an .env file with the values for .env-example
 #### Deployment
 - Deployment instructions
 
