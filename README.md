@@ -191,8 +191,8 @@ To run this project , the following is required:
 
 After cloning the project, start the terminal. Make sure that you are in root of  Audit-Log-Service project. Then run the following commands:
 
-    $ chmod +x setup-env.sh
-    $ ./setup-env.sh
+     chmod +x setup-env.sh
+     ./setup-env.sh
 
 This runs a bash script that will generate a .env file with the required environment variables required for the project. 
 
