@@ -1,6 +1,5 @@
 """
-Created on Tue Aug 16 13:05:56 2023
-
+Created on Wed Aug 23 02:39:23 2023
 
 Description: 
     The function SignIn defines a route for user login, where it authenticates a user
@@ -34,24 +33,24 @@ from flask import jsonify, request, make_response
 # Define a route for user login.
 def SignIn(app):
     @app.route('/login', methods=['POST'])
-    #login()` that handles user login and JWTtoken generation.
     def login():
-        
+        # The code block you provided is a function called `login()` that handles user login and JWT
+        # token generation. Here's a breakdown of what it does:
         try:
-            infos = request.get_json()
+            data = request.get_json()
 
             # Check if both "username" and "password" are present in the request
-            if 'username' not in infos or 'password' not in infos:
+            if 'username' not in data or 'password' not in data:
                 # This returns a response indicating a status code of 401, which means that 
                 # the request requires authentication and the client's credentials are missing.
                 return make_response('Bad Request: Missing username or password', 401)
 
             # Validates username and password
-            if infos['username'] == app.config['USER'] and infos['password'] == app.config['PASS']:
+            if data['username'] == app.config['USERNAME'] and data['password'] == app.config['PASSWORD']:
                 # Generate a JWT token.
                 token = jwt.encode(
                     {
-                        'user':infos['username'],
+                        'user':data['username'],
                         'expiration':(datetime.now() + timedelta(seconds=3600)).isoformat()
                     },
                     app.config['SECRET_KEY'],

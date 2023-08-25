@@ -18,10 +18,7 @@ services:
     ports:
       - 8080:8080
     env_file:   
-      - .env   # Path to your .env file
+      - .env
     volumes:
-      - mongodb_data:/path/to/mongodb/data  # Configure this to your actual data path
-
-volumes:
-  mongodb_data:  # The volume that will be created and synced with the host machine
+      - .env:/app/.env  # This will map the .env file from the host to the /app directory inside the container
   

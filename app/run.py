@@ -5,17 +5,27 @@ This is the entry point of the application.
 It initializes the Flask app, configures it, and runs it using Gunicorn.
 """
 # Import necessary libraries and modules.
+import os
 from flask import Flask
+from dotenv import load_dotenv
 from pymongo import MongoClient
 from mainfiles import login
 from mainfiles.routes import main_bp
-from mainfiles.config import settings
 
 # Create a Flask app instance.
 app = Flask(__name__)
 
-# Configure the app by calling the settings function from config.py.
-settings(app)
+
+# Get environment variables and pass them to the settings function
+app.config.from_object(__name__)
+
+# Load environment variables from .env file into Flask app
+load_dotenv()
+
+app.config['USERNAME'] = os.environ.get('USERNAME')
+app.config['PASSWORD'] = os.environ.get('PASSWORD')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['MONGODBATLAS_HOST'] = os.environ.get('MONGODBATLAS_HOST')
 
 # Set up user login and authentication by calling SignIn function from login.py.
 login.SignIn(app)

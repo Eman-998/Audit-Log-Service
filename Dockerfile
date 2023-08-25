@@ -24,3 +24,6 @@ COPY ./app /app/
 
 # Define the command to run your application
 CMD ["gunicorn", "run:app", "-c", "gunicorn_config.py"]
+
+
+

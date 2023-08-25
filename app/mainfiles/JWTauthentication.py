@@ -1,5 +1,5 @@
+
 """
-Created on Tue Aug 21 16:08:56 2023
 
 Description: 
     The function acts as a middleware and defines a decorator generator for JWT-based authentication in Python.

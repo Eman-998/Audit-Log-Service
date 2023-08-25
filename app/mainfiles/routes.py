@@ -1,10 +1,8 @@
 
 """
-Created on Tue Aug 15 04:05:38 2023
 This script defines the API endpoints for submitting and retrieving events. 
 """
 #Submitting an event
-
 """
 Description: 
     This endpoint posts a new event  using the POSTSERVICE function. The /event POST route uses the
@@ -25,7 +23,6 @@ API Endpoint:
     POST /event
 
 """
-
 #Posting an event
 
 """
@@ -192,4 +189,3 @@ def GETSERVICE(user_id):
     # Return 500 if there was an error while trying to create a resource. \
     except Exception as e:
         return make_response(json.dumps({"error": str(e)}), 500)
-
