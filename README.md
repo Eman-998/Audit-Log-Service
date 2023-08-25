@@ -1,4 +1,18 @@
 ﻿#  AUDIT LOG SERVICE
+ 
+# Table of contents 
+
+###### [Project Description]
+
+###### [Technologies Used]
+
+###### [Design of Microservice API]
+
+###### [Testing of Microservice API]
+
+###### [Rationale and Trade-offs]
+
+###### [Future Plans]
 
 ## Project Description
 
@@ -6,10 +20,11 @@ The **Audit Log Microservice API System** is a versatile and robust solution for
 
 Examples of events recorded:
 
-a new customer account was created for a given identity
-a customer performed an action on a resource
-a customer was billed a certain amount
-a customer account was deactivated
+- a new customer account was created for a given identity
+- a customer performed an action on a resource
+- a customer was billed a certain amount
+- a customer account was deactivated
+  
 The list of event types is open-ended, all events should contain a common set of fields and a set of fields specific to the event type. The code should not need to be modified for it to accept a new event type. Also note that this service is write-intensive.
 
 ## Technologies Used
@@ -164,14 +179,15 @@ To run this project , the following is required:
  Docker Desktop is required to build and run the Docker container that encapsulates your application and its dependencies.
 
  **2. Python ( version 3.x or later)**
+ 
  Python is needed to execute the project code, particularly when running and testing the application locally.
 
- **4. Cloning the git project**
+ **3. Cloning the git project**
 
      git clone https://github.com/Eman-998/Audit-Log-Service.git
 
  
- **5.  Generating an .env file**
+ **4.  Generating an .env file**
 
 After cloning the project, start the terminal. Make sure that you are in root of  Audit-Log-Service project. Then run the following commands:
 
