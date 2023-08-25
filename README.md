@@ -43,6 +43,17 @@ The list of event types is open-ended, all events should contain a common set of
 
 ## Design of Microservice API
 
+### Diagram
+The diagram illustrates the flow of data between the client, your API, and the MongoDB database. 
+![Diagram](diagram.png)
+
+User: Represents the client application or system that interacts with the API.
+
+API: Represents the Flask-based microservice API. It handles incoming requests, performs authentication using JWT, and processes the requests.
+
+MongoDB (Audit Log Database): Represents the MongoDB database where the audit log events are stored. 
+
+
 ### Base URL
 
 The base URL for this microservice is: `http://localhost:8080/`
