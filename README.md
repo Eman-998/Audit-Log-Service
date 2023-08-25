@@ -454,19 +454,18 @@ This is done through the requirements.txt which is deployed using Dockerfile whi
 
 - Implement more specific error handling by catching and handling different JWT-related exceptions separately in JWT Token Decoding.
 
-- Implement a robust logging strategy that logs important events and errors. Code lacks comprehensive logging and monitoring mechanisms that is cause challenges in diagnosing and trobuleshooting issues in a production environment.
+- Implement a logging mechanism that logs important events and errors. Code lacks comprehensive logging and monitoring mechanisms that causes challenges in diagnosing and trobuleshooting issues in a production environment.
 
 - Set up monitoring tools and alerting systems to proactively detect and respond to issues.
-- Lack of support for complex querying therefore a more robost validation mechanism for schemas should be implemented due to the flexibility of mongoDB schemas.
+- Lack of support for complex querying therefore a more robust validation mechanism for schemas should be implemented due to the flexibility of mongoDB schemas.
 - Implementing MongoDB data sharding strategies to distribute data across multiple databases or shards to manage large datasets efficiently.
 - Implement thorough input validation, including data sanitization, to prevent security vulnerabilities such as SQL injection or cross-site scripting (XSS).
 - Implement automated testing that covers unit testing, integration testing, and end to end testing.
 - Using Ngnix to manage load balancing across multiple instances to distribute incoming requests evenly.
 - Set up structured logging, monitoring, and alerting systems to track errors, debug information.
-- Implement specific exception handling for different components.
 - Implement using message queuing systems for scalability, fault tolerance and asynchronous processing. 
 - `docker-compose.yml` is designed for a single instance of the microservice. For high availability and scalability, there's a need for container orchestration solutions like Kubernetes to manage multiple instances of your microservice.
-- 
+  
 
 
 
