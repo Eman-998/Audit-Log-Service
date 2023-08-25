@@ -1,55 +1,16 @@
-<<<<<<< HEAD
-# AUDIT LOG SERVICE
-
-## Project Description
-
-The Audit Log Microservice API is a versatile and robust solution for recording and managing various types of events sent by other systems. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values. This service is write-intensive.
-
-## Key Features 
-
-*Event Recording: The service is designed to record a wide range of events, including but not limited to:
-
-Creation of new customer accounts for a given identity.
-Customer actions on specific resources.
-Billing events, including the amount billed.
-Customer account deactivation.
-
-*Open-Ended Event Types: The service accommodates an open-ended list of event types. It enforces a structure where all events contain a common set of fields along with event-specific data. This flexibility allows the service to adapt to new event types without requiring code modifications.
-
-*Authentication: To ensure data security, the service incorporates authentication mechanisms for both event submission and querying endpoints. This guarantees that only authorized users can interact with the service.
-
-*Microservice Architecture: The Audit Log Microservice is designed to be a lightweight and efficient microservice. It runs as an HTTP server, making it easy to integrate into your existing system architecture.
-
-## Technologies Used
-
-Python: Chose Python for its readability, extensive ecosystem, and ease of use, aligning with the project's goal of clean and maintainable code.
-
-Flask: Utilized Flask as it's a lightweight Python web framework, perfect for building microservices like this one.
-
-MongoDB: Opted for MongoDB for its flexibility and scalability, fitting the open-ended event types and accommodating different data storage needs.
-
-JWT (JSON Web Tokens): Employed JWT for authentication to ensure secure access to event submission and querying endpoints, in line with the project's security focus.
-
-Docker: Utilized Docker to containerize the application, simplifying deployment and ensuring consistency across different environments.
-
-Gunicorn: Gunicorn serves as the WSGI HTTP server, making the application production-ready with multi-worker support.
-=======
-#  AUDIT LOG SERVICE
+﻿#  AUDIT LOG SERVICE
 
 ## Project Description
 
 The **Audit Log Microservice API System** is a versatile and robust solution for recording and managing various types of events sent by other systems. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values. This service is write-intensive.
 
-## Key Features
+Examples of events recorded:
 
-**Event Recording**: The service is designed to record a wide range of events.
-
-**Open-Ended Event Types**: The service accommodates an open-ended list of event types. It enforces a structure where all events contain a common set of fields along with event-specific data. This flexibility allows the service to adapt to new event types without requiring code modifications.
-
-**Authentication**: To ensure data security, the service incorporates authentication mechanisms for both event submission and querying endpoints. This guarantees that only authorized users can interact with the service.
-
-**Microservice Architecture**: The Audit Log Microservice is designed to be a lightweight and efficient microservice. It runs as an HTTP server, making it easy to integrate into your existing system architecture.
-
+a new customer account was created for a given identity
+a customer performed an action on a resource
+a customer was billed a certain amount
+a customer account was deactivated
+The list of event types is open-ended, all events should contain a common set of fields and a set of fields specific to the event type. The code should not need to be modified for it to accept a new event type. Also note that this service is write-intensive.
 
 ## Technologies Used
 
@@ -63,150 +24,106 @@ The **Audit Log Microservice API System** is a versatile and robust solution for
 
 **Docker**: Utilized Docker to containerize the application, simplifying deployment and ensuring consistency across different environments.
 
-**Gunicorn**: Gunicorn serves as the WSGI HTTP server, making the application production-ready with multi-worker support.
->>>>>>> 7e7ce5829f3f185f8b1fec48762f94ce3f899a24
+**Gunicorn**: Gunicorn serves as the WSGI HTTP server, making the application production-ready with multi-worker support. This server currently runs 4 workers.
 
-## Usage
+## Design of Microservice API
+
+### Base URL
+
+The base URL for this microservice is: `http://localhost:8080/`
 
 ### Authentication
 
-<<<<<<< HEAD
-Authentication in this project is implemented using the following functions and components from the provided code:
+The microservice uses JSON Web Token (JWT) authentication to secure its endpoints. To access protected endpoints, clients must include a valid JWT token in the `Authorization` header.  
 
-User Registration and Login (login.py):
+### Error Responses
 
-SignIn(app): This function defines the /login endpoint, allowing users to log in by sending a POST request with their username and password.
-JWT Authentication (JWTauthentication.py):
+The API returns JSON error responses in the following format:
 
-JWTtoken(): This function is a decorator used to protect endpoints that require authentication. It verifies JWTs sent in the Authorization header of incoming requests.
-Authentication Integration (routes.py):
+    {
+      "error": "Error message here"
+    }
+    
+### Endpoints
 
-@JWTtoken(): This decorator is applied to endpoints that require authentication, ensuring that only users with valid JWTs can access them.
-These functions and components work together to provide secure authentication and authorization for the service, allowing registered users to obtain and use JWTs for accessing protected endpoints.
+#### Welcome Message
 
-### Submitting Events
+-   **Endpoint**: `/`
+-   **HTTP Method**: GET
+-   **Description**: Provides a basic welcome message for users visiting the service.
+-   **Authentication**: Not required
+-   **Example**:
+ `curl http://localhost:8080/`
+ #### User Login
 
-Event submission in this project involves the following functions and components from the provided code:
+-   **Endpoint**: `/login`
+-   **HTTP Method**: POST
+-   **Description**: Allows users to log in by providing a valid username and password. If authentication is successful, a JWT token is generated and returned.
+-   **Authentication**: Not required
+-   **Request Body**:
+````
+{ 
+		 "username":  "your_username",  
+		 "password":  "your_password"  
+ }
+````
+**Response**:
 
-1.Event Submission (routes.py):
+````
+{  "token":  "generated_jwt_token"  }
+````
+#### Submitting an Event
 
-@main_bp.route('/event', methods=['POST']): This route handles event submission through HTTP POST requests.
+-   **Endpoint**: `/event`
+-   **HTTP Method**: POST
+-   **Description**: Posts a new event to the audit log. The request body must conform to the JSON schema defined.
+-   **Authentication**: Required (JWT token in `Authorization` header)
+-   **Request Body**:
+````
+{  
+"event_type":  "string",
+"username":  "string",
+"entitytype":  "string",  
+"ip":  "string",  
+"location":  "string",  
+"description":  "string",  
+"event_specificdetails":  {  
+// Additional event-specific fields here 
+(optional)  
+	}  
+}
+````
+- **Example**: 
+````
+will be shown through curl commands in the testing section
+````
+-   **Response**: Returns a confirmation message.
+#### Retrieving Events
 
-POSTSERVICE(user_id): This function is the handler for event submission. It validates incoming event data against the defined JSON schema and inserts the event into the MongoDB database.
-
-2.JSON Schema Validation (routes.py):
-
-jsonschema.validate(data, json_schema): This function validates incoming event data against the JSON schema defined in Schema.json. It ensures that submitted events adhere to the required structure.
-
-3.MongoDB Integration (routes.py):
-
-MongoDB is used to store event data in the events collection. The code uses the pymongo library to interact with the MongoDB database.
-These functions and components collectively enable the secure submission of events to the service, ensuring that only authenticated users can add events that comply with the defined JSON schema.
-
-### Querying Events
-
-Querying events in this project involves the following functions and components from the provided code:
-
-Event Querying (routes.py):
-
-@main_bp.route('/event', methods=['GET']): This route handles event querying through HTTP GET requests.
-GETSERVICE(user_id): This function is the handler for event querying. It constructs a query based on the provided query parameters (e.g., event type, username) and retrieves matching events from the MongoDB database.
-MongoDB Integration (routes.py):
-
-MongoDB is used to store event data in the events collection. The code uses the pymongo library to interact with the MongoDB database.
-Query Parameter Parsing (routes.py):
-
-The function parses query parameters from the HTTP request to construct a query for event retrieval. Parameters such as event_type, username, entitytype, ip, location, description, timeStart, and timeEnd can be used to filter events.
-These functions and components collectively enable users to query events based on specific criteria, providing a flexible and powerful way to retrieve event data from the service.
-=======
-Authentication in this project is implemented using the following functions and components from the *login.py* and *JWTAuthentication.py* file:
-
-***SignIn(app):*** 
-This function defines the /login endpoint, allowing users to log in by sending a POST request with their username and password.
-
-***@JWTtoken():*** 
-This decorator is applied to endpoints that require authentication, ensuring that only users with valid JWTs can access them.
-
-### Submitting Events
-
-Event submission in this project involves the following functions and components from the *routes.py* file:
-
-***@main_bp.route('/event', methods=['POST']):***
- This route handles event submission through HTTP POST requests and used with the next function.
-
-***POSTSERVICE(user_id):***
-This function is the handler for event submission. It validates incoming event data against the defined JSON schema and inserts the event into the MongoDB database.
-
-### Querying Events
-
-Querying events in this project involves the following functions and components from the *routes.py* file:
-
-***@main_bp.route('/event', methods=['GET']):*** 
-This route handles event querying through HTTP GET requests and used with the next function.
-
-***GETSERVICE(user_id):*** 
-This function is the handler for event querying. It constructs a query based on the provided query parameters (e.g., event type, username) and retrieves matching events from the MongoDB database.
->>>>>>> 7e7ce5829f3f185f8b1fec48762f94ce3f899a24
-
+-   **Endpoint**: `/event`
+-   **HTTP Method**: GET
+-   **Description**: Retrieves events from the audit log based on query parameters.
+-   **Authentication**: Required (JWT token in `Authorization` header)
+-   **Query Parameters**:
+    -   `event_type`
+    -   `username` 
+    -   `entitytype` 
+    -   `ip`
+    -   `location`
+    -   `description`
+    -   `timeStart` .
+    -   `timeEnd` 
+    
+   - **Example**:
+ ````
+It will be shown through curl commands in the testing section
+````
+-   **Response**: Returns a JSON array containing retrieved events.
+- 
 ### Schema
 The Schema for the events is found in the mainfiles folder named Schema.json:
 
-<<<<<<< HEAD
-Here is an sample of how itd look like
-
-
-{
-  "event_type": "AccountCreated",
-  "username": "john_mayor",
-  "entitytype": "customer_account",
-  "ip": "192.168.0.1",
-  "location": "New York",
-  "description": "A new customer account was created for John Mayor",
-  "event_specificdetails": {
-    "account_number": "94859",
-    "email": "john@gmail.com"
-  }
-}
-
-
-What's Required (Invariant Data):
-
-event_type: A string specifying the type of the event.
-username: A string representing the username associated with the event.
-entitytype: A string indicating the type of entity involved in the event (e.g., customer, resource).
-ip: A string representing the IP address associated with the event.
-location: A string describing the location or context of the event.
-description: A string providing a description or summary of the event.
-
-What Isn't Required (Variant Data):
-
-event_specificdetails: An optional object that allows for additional event-specific data. This field is open-ended and can vary based on the type of event being recorded. It's not required but allows for flexibility to capture event-specific information.
-This schema ensures that all events must include the invariant data fields, guaranteeing a consistent structure. The event_specificdetails field provides the flexibility needed to accommodate variant data specific to each event type.
-## Getting Started
-
-### Installation
-
-#### Prerequisites
-
-To run this project , the following is required:
- 
-1.Docker Desktop: Docker Desktop is required to build and run the Docker container that encapsulates your application and its dependencies.
-
-2.Python ( version 3.x or later): Python is needed to execute the project code, particularly when running and testing the application locally.
-#### Deployment
-- Deployment instructions
-
-#### Testing
-- Instructions for running tests
-
-##### Registering a user
-##### Logging a user
-##### Obtaining a BEARER_TOKEN for user
--expires when
-##### Posting Events
-##### Querying Events
-=======
-Here is an sample of how it'd look like
+Here is an sample of how it would look like:
 
     {
       "event_type": "AccountCreated",
@@ -233,18 +150,16 @@ Here is an sample of how it'd look like
 
 **What Isn't Required (Variant Data):**
 
-*event_specificdetails:* An optional object that allows for additional event-specific data. This field is open-ended and can vary based on the type of event being recorded. It's not required but allows for flexibility to capture event-specific information.
+*event_specificdetails:* An optional object that allows for additional event-specific data. 
 
 This schema ensures that all events must include the invariant data fields, guaranteeing a consistent structure. 
 
-## Getting Started
+## TESTING of Microservice API
 
-### A. Prerequisites
-
+### Prerequisites
 To run this project , the following is required:
  
-
- **1. Docker Desktop**
+**1. Docker Desktop**
 
  Docker Desktop is required to build and run the Docker container that encapsulates your application and its dependencies.
 
@@ -267,22 +182,25 @@ This runs a bash script that will generate a .env file with the required environ
 
 You will now be prompted to enter a username and password. Enter as per your wish. The username and passowrd will then be stored in the environment variables.
  
-### B. Deployment
-To deploy the project, ensure that you are at the root of the project directory. The entire project will be deployed with the following command:
+### Deployment
+To deploy the project, ensure that you are at the root of the project directory. The entire project will be deployed with the following single command on ubuntu :
 
     docker-compose up -d
 
-After the containers have been built, The service will be tested in the terminal. Sometimes, environment variables aren't loaded properly so next run the following command:
+After the containers have been built, The service will be tested in the terminal. 
+
+Load the environment variables in the host terminal
 
     source .env
 
-### C. Testing
+### Running
 
-#### System Check
+Now the service is up and running! To check if its live, run the following command:
 
     curl --request GET --url "http://localhost:8080/" 
-    
-#### Obtaining a BEARER_TOKEN for user
+
+Since ther service uses JWT Authetication, a bearer token is required to test the upcoming Curl commands.      
+#### Obtain a BEARER_TOKEN for user
 
     BEARER_TOKEN=$(curl --request POST --url "http://localhost:8080/login" --header "Content-Type: application/json" --data 
     '{
@@ -290,11 +208,15 @@ After the containers have been built, The service will be tested in the terminal
       "password": "'$PASSWORD'"
     }' | jq -r '.token')
 
-This is crucial as every post and get request requies a bearer token
+The token is generated and loaded into the BEARER_TOKEN variable. It is using a secret key which is generated randomly using SSL. 
+
+##### *Note: To test with an invalid token, you can replace the values of BEARER_TOKEN with any other token value . Doing so will give an invalid token error*
+##### *Note: The BEARER_TOKEN is valid for 30 minutes. 
 #### Posting Events
 
+In the terminal, please copy and post the following examples in the terminal.
 
-Example: A new customer account was created for John Mayor
+*Example 1: A new customer account was created for user*
 
     curl --request POST --url "http://localhost:8080/event" \
     --header "Authorization: Bearer: $BEARER_TOKEN" \
@@ -309,38 +231,20 @@ Example: A new customer account was created for John Mayor
       "event_specificdetails": {
         "account_number": "94859",
         "email": "john@gmail.com"
+        "creation_date": "2023-08-22"
+    
       }
     }'
-
-Example: A customer performed an action on a resource
-
-    curl --request POST --url "http://localhost:8080/event" \
-    --header "Authorization: Bearer: $BEARER_TOKEN" \
-    --header "Content-Type: application/json" \
-    --data '{
-      "event_type": "ResourceAction",
-      "username": "alice_smith",
-      "entitytype": "resource",
-      "ip": "192.168.0.2",
-      "location": "Los Angeles",
-      "description": "A customer performed an action on a resource",
-      "event_specificdetails": {
-        "resource_id": "456789",
-        "action": "update",
-        "timestamp": "2023-08-21T12:00:00"
-      }
-    }'
-
-Example: A customer was billed a certain amount 
+*Example 2: A customer was billed a certain amount* 
 
     curl --request POST --url "http://localhost:8080/event" \
     --header "Authorization: Bearer: $BEARER_TOKEN" \
     --header "Content-Type: application/json" \
     --data '{
       "event_type": "billing",
-      "username": "bob_johnson",
+      "username": "john_mayor",
       "entitytype": "customer",
-      "ip": "192.168.0.3",
+      "ip": "192.168.0.1",
       "location": "Chicago",
       "description": "A customer was billed a certain amount",
       "event_specificdetails": {
@@ -350,25 +254,26 @@ Example: A customer was billed a certain amount
       }
     }'
 
-Example: A customer account was deactivated
+*Example 3: A customer account was deactivated*
 
     curl --request POST --url "http://localhost:8080/event" \
     --header "Authorization: Bearer: $BEARER_TOKEN" \
     --header "Content-Type: application/json" \
     --data '{
       "event_type": "account_deactivation",
-      "username": "bob_johnson",
+      "username": "alice_johnson",
       "entitytype": "customer_account",
       "ip": "192.168.0.3",
       "location": "Chicago",
       "description": "A customer account was deactivated",
       "event_specificdetails": {
         "reason": "Account closed by request",
-        "deactivation_date": "2023-08-25"
+        "deactivation_date": "2023-08-19"
       }
     }'
 
-Example: A customer was billed a certain amount 
+
+*Example 4: A customer was billed a certain amount* 
 
     curl --request POST --url "http://localhost:8080/event" \
     --header "Authorization: Bearer: $BEARER_TOKEN" \
@@ -378,74 +283,151 @@ Example: A customer was billed a certain amount
       "username": "david_smith",
       "entitytype": "customer",
       "ip": "192.168.0.6",
-      "location": "Los Angeles",
+      "location": "Dubai",
       "description": "A customer was billed a certain amount",
       "event_specificdetails": {
         "amount": 75.5,
-        "currency": "USD",
+        "currency": "AED",
         "billing_date": "2023-08-21"
       }
     }'
 
 #### Querying Events
 
-**Retrieving all events**
+##### **This retrieves all events avaible in the database**
 
-    curl --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+    curl -s --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-**Query on Variant Fields Only:**
+##### **This retrieves the number of events available in the database [4 in this case]**
 
-*Example 1: Query events where the event_specificdetails include a "resource_id" of "456789"*
+    curl -s --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq 'length'
 
-    curl --request GET --url "http://localhost:8080/event?event_specificdetails.resource_id=456789" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-*Example 2: Query events where the event_specificdetails include an "action" of "update"*
 
-    curl --request GET --url "http://localhost:8080/event?event_specificdetails.action=update" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+##### **Query on Variant Fields Only**
 
-*Example 3: Query events where the event_specificdetails include a "billing_date" of "2023-08-25"*
+*This command queries events where the event_specificdetails include an "action" of "update"*
 
-    curl --request GET --url "http://localhost:8080/event?event_specificdetails.billing_date=2023-08-25" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+    curl -s --request GET --url "http://localhost:8080/event?event_specificdetails.action=update" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-**Query on Invariant Fields Only :**
+ - This will return [] because there is no such event logged in that has
+   updated their account
 
-*Example 4: Query events with an "event_type" of "account_created"*
+*This command queries events where the event_specificdetails include a "billing_date" of "2023-08-21"*
 
-    curl --request GET --url "http://localhost:8080/event?event_type=account_created" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+    curl -s --request GET --url "http://localhost:8080/event?event_specificdetails.billing_date=2023-08-21" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-*Example 5: Query events with a "username" of "john_mayor"*
+ 
 
-    curl --request GET --url "http://localhost:8080/event?username=john_mayor" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+ - This will return the following:
+   
+        [
+         {
+           "_id": "emma_1692986668.409667",
+           "description": "A customer was billed a certain amount",
+           "entitytype": "customer",
+           "event_specificdetails": {
+             "amount": 75.5,
+             "billing_date": "2023-08-21",
+             "currency": "AED"
+           },
+           "event_type": "billing",
+           "ip": "192.168.0.6",
+           "location": "Dubai",
+           "timestamp": 1692986668.409667,
+           "user_id": "emma",
+           "username": "david_smith"
+         }
+       ]
 
-*Example 6: Query events with an "ip" of "192.168.0.1"*
+ 
+##### **Query on Invariant Fields Only** 
+  
+*This command queries  events with a "location" of "Chicago"*
 
-    curl --request GET --url "http://localhost:8080/event?ip=192.168.0.1" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+    curl -s --request GET --url "http://localhost:8080/event?location=Chicago" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+ 
 
-**Query on Both Variant and Invariant Fields:**
+*This command queries  events with an "ip" of "192.168.0.1"*
 
-*Example 7: Query events with an "event_type" of "account_created" and a "location" of "New York"*
+    curl -s --request GET --url "http://localhost:8080/event?ip=192.168.0.1" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-    curl --request GET --url "http://localhost:8080/event?event_type=account_created&location=New%20York" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+##### **Query on Both Variant and Invariant Fields:** 
 
-*Example 8: Query events with an "event_type" of "billing" and an "amount" of 100.0*
+*This command queries   events with an "event_type" of "account_created" and a "location" of "Dubai"*
 
-    curl --request GET --url "http://localhost:8080/event?event_type=billing&event_specificdetails.amount=100.0" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-*Example 9: Query events with a "username" of "alice_johnson" and a "description" containing "created*"
+    curl -s --request GET --url "http://localhost:8080/event?event_type=AccountCreated&location=Dubai" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-    curl --request GET --url "http://localhost:8080/event?username=alice_johnson&description=created" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
->>>>>>> 7e7ce5829f3f185f8b1fec48762f94ce3f899a24
+ - This will return [] because there is an event_type of account_created
+   but it was not created in Dubai
 
+*This command queries  events with an "event_type" of "billing" and an "currency" of 'AED'*
+
+    curl -s --request GET --url "http://localhost:8080/event?event_type=billing&event_specificdetails.currency=AED" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+
+
+## Dependencies
+
+This is done through the requirements.txt which is deployed using Dockerfile which runs with docker-compose
+
+-   Flask==2.3.2
+-   PyJWT==2.7.0
+-   Gunicorn==21.2.0
+-   python-dotenv==0.19.0
+-   jsonschema==4.17.3
+-   pymongo==4.3.3
 
 ## Rationale and Trade-offs
 
-<<<<<<< HEAD
+
+**Flask**:
+
+-   Rationale: Chosen for its simplicity and ease of use, making it suitable for rapid development.
+-   Trade-offs: Limited built-in features compared to larger frameworks, but this aligns with the project's goal to avoid extensive frameworks.
+
+**MongoDB**:
+
+-   Rationale: Suitable for an open-ended list of events due to its schema-less nature, offering flexibility.
+-   Trade-offs: Complex querying can be challenging, but this aligns with the project's requirement for basic querying.
+
+**JWT (JSON Web Tokens)**:
+
+-   Rationale: Provides stateless authentication, enhancing security without the need for server-side sessions.
+-   Trade-offs: Token management and revocation may be more complex for some use cases.
+
+**Docker**:
+
+-   Rationale: Ensures consistency across environments and simplifies deployment.
+-   Trade-offs: Slight overhead due to containerization, but this is outweighed by its benefits.
+
+**Gunicorn**:
+
+-   Rationale: Easy to set up and suitable for production environments.
+-   Trade-offs: Less suitable for development environments compared to lightweight servers like Waitress, but optimal for production use.
+
 ## Future Plans
-=======
-## Future Plans
+
+
+- Implement more specific error handling by catching and handling different JWT-related exceptions separately in JWT Token Decoding.
+
+- Implement a robust logging strategy that logs important events and errors. Code lacks comprehensive logging and monitoring mechanisms that is cause challenges in diagnosing and trobuleshooting issues in a production environment.
+
+- Set up monitoring tools and alerting systems to proactively detect and respond to issues.
+- Lack of support for complex querying therefore a more robost validation mechanism for schemas should be implemented due to the flexibility of mongoDB schemas.
+- Implementing MongoDB data sharding strategies to distribute data across multiple databases or shards to manage large datasets efficiently.
+- Implement thorough input validation, including data sanitization, to prevent security vulnerabilities such as SQL injection or cross-site scripting (XSS).
+- Implement automated testing that covers unit testing, integration testing, and end to end testing.
+- Using Ngnix to manage load balancing across multiple instances to distribute incoming requests evenly.
+- Set up structured logging, monitoring, and alerting systems to track errors, debug information.
+- Implement specific exception handling for different components.
+- Implement using message queuing systems for scalability, fault tolerance and asynchronous processing. 
+- `docker-compose.yml` is designed for a single instance of the microservice. For high availability and scalability, there's a need for container orchestration solutions like Kubernetes to manage multiple instances of your microservice.
+- 
 
 
 
 
 
->>>>>>> 7e7ce5829f3f185f8b1fec48762f94ce3f899a24
+
+
