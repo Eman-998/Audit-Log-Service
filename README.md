@@ -217,12 +217,13 @@ Now the service is up and running! To check if its live, run the following comma
 
 Since ther service uses JWT Authetication, a bearer token is required to test the upcoming Curl commands.      
 #### Obtain a BEARER_TOKEN for user
+```
+BEARER_TOKEN=$(curl --request POST --url "http://localhost:8080/login" --header "Content-Type: application/json" --data '{
+  "username": "'$USERNAME'",
+  "password": "'$PASSWORD'"
+}' | jq -r '.token')
+```
 
-    BEARER_TOKEN=$(curl --request POST --url "http://localhost:8080/login" --header "Content-Type: application/json" --data 
-    '{
-      "username": "'$USERNAME'",
-      "password": "'$PASSWORD'"
-    }' | jq -r '.token')
 
 The token is generated and loaded into the BEARER_TOKEN variable. It is using a secret key which is generated randomly using SSL. 
 
@@ -234,107 +235,118 @@ In the terminal, please copy and post the following examples in the terminal.
 
 *Example 1: A new customer account was created for user*
 
-    curl --request POST --url "http://localhost:8080/event" \
-    --header "Authorization: Bearer: $BEARER_TOKEN" \
-    --header "Content-Type: application/json" \
-    --data '{
-      "event_type": "AccountCreated",
-      "username": "john_mayor",
-      "entitytype": "customer_account",
-      "ip": "192.168.0.1",
-      "location": "New York",
-      "description": "A new customer account was created for John Mayor",
-      "event_specificdetails": {
-        "account_number": "94859",
-        "email": "john@gmail.com"
-        "creation_date": "2023-08-22"
-    
-      }
-    }'
+```
+curl --request POST --url "http://localhost:8080/event" \
+--header "Authorization: Bearer: $BEARER_TOKEN" \
+--header "Content-Type: application/json" \
+--data '{
+  "event_type": "AccountCreated",
+  "username": "john_mayor",
+  "entitytype": "customer_account",
+  "ip": "192.168.0.1",
+  "location": "New York",
+  "description": "A new customer account was created for John Mayor",
+  "event_specificdetails": {
+    "account_number": "94859",
+    "email": "john@gmail.com"
+  }
+}'
+
+```
 *Example 2: A customer was billed a certain amount* 
 
-    curl --request POST --url "http://localhost:8080/event" \
-    --header "Authorization: Bearer: $BEARER_TOKEN" \
-    --header "Content-Type: application/json" \
-    --data '{
-      "event_type": "billing",
-      "username": "john_mayor",
-      "entitytype": "customer",
-      "ip": "192.168.0.1",
-      "location": "Chicago",
-      "description": "A customer was billed a certain amount",
-      "event_specificdetails": {
-        "amount": 100.0,
-        "currency": "USD",
-        "billing_date": "2023-08-22"
-      }
-    }'
+```
+curl --request POST --url "http://localhost:8080/event" \
+--header "Authorization: Bearer: $BEARER_TOKEN" \
+--header "Content-Type: application/json" \
+--data '{
+  "event_type": "billing",
+  "username": "john_mayor",
+  "entitytype": "customer",
+  "ip": "192.168.0.1",
+  "location": "Chicago",
+  "description": "A customer was billed a certain amount",
+  "event_specificdetails": {
+    "amount": 100.0,
+    "currency": "USD",
+    "billing_date": "2023-08-22"
+  }
+}'
+
+```
 
 *Example 3: A customer account was deactivated*
 
-    curl --request POST --url "http://localhost:8080/event" \
-    --header "Authorization: Bearer: $BEARER_TOKEN" \
-    --header "Content-Type: application/json" \
-    --data '{
-      "event_type": "account_deactivation",
-      "username": "alice_johnson",
-      "entitytype": "customer_account",
-      "ip": "192.168.0.3",
-      "location": "Chicago",
-      "description": "A customer account was deactivated",
-      "event_specificdetails": {
-        "reason": "Account closed by request",
-        "deactivation_date": "2023-08-19"
-      }
-    }'
+```
+curl --request POST --url "http://localhost:8080/event" \
+--header "Authorization: Bearer: $BEARER_TOKEN" \
+--header "Content-Type: application/json" \
+--data '{
+  "event_type": "account_deactivation",
+  "username": "alice_johnson",
+  "entitytype": "customer_account",
+  "ip": "192.168.0.3",
+  "location": "Chicago",
+  "description": "A customer account was deactivated",
+  "event_specificdetails": {
+    "reason": "Account closed by request",
+    "deactivation_date": "2023-08-19"
+  }
+}'
 
+```
 
 *Example 4: A customer was billed a certain amount* 
+```
+curl --request POST --url "http://localhost:8080/event" \
+--header "Authorization: Bearer: $BEARER_TOKEN" \
+--header "Content-Type: application/json" \
+--data '{
+  "event_type": "billing",
+  "username": "david_smith",
+  "entitytype": "customer",
+  "ip": "192.168.0.6",
+  "location": "Dubai",
+  "description": "A customer was billed a certain amount",
+  "event_specificdetails": {
+    "amount": 75.5,
+    "currency": "AED",
+    "billing_date": "2023-08-21"
+  }
+}'
 
-    curl --request POST --url "http://localhost:8080/event" \
-    --header "Authorization: Bearer: $BEARER_TOKEN" \
-    --header "Content-Type: application/json" \
-    --data '{
-      "event_type": "billing",
-      "username": "david_smith",
-      "entitytype": "customer",
-      "ip": "192.168.0.6",
-      "location": "Dubai",
-      "description": "A customer was billed a certain amount",
-      "event_specificdetails": {
-        "amount": 75.5,
-        "currency": "AED",
-        "billing_date": "2023-08-21"
-      }
-    }'
-
+```
 #### Querying Events
 
 ##### **This retrieves all events avaible in the database**
+```
+curl -s --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
 
-    curl -s --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
-
+```
 ##### **This retrieves the number of events available in the database [4 in this case]**
 
-    curl -s --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq 'length'
+```
+curl -s --request GET --url "http://localhost:8080/event" --header "Authorization: Bearer: $BEARER_TOKEN" | jq 'length'
 
-
+```
 
 ##### **Query on Variant Fields Only**
 
 *This command queries events where the event_specificdetails include an "action" of "update"*
 
-    curl -s --request GET --url "http://localhost:8080/event?event_specificdetails.action=update" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
+curl -s --request GET --url "http://localhost:8080/event?event_specificdetails.action=update" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+
+```
 
  - This will return [] because there is no such event logged in that has
    updated their account
 
 *This command queries events where the event_specificdetails include a "billing_date" of "2023-08-21"*
 
-    curl -s --request GET --url "http://localhost:8080/event?event_specificdetails.billing_date=2023-08-21" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
-
- 
-
+```
+ curl -s --request GET --url "http://localhost:8080/event?event_specificdetails.billing_date=2023-08-21" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
  - This will return the following:
    
         [
@@ -361,27 +373,32 @@ In the terminal, please copy and post the following examples in the terminal.
   
 *This command queries  events with a "location" of "Chicago"*
 
-    curl -s --request GET --url "http://localhost:8080/event?location=Chicago" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
- 
+```
+curl -s --request GET --url "http://localhost:8080/event?location=Chicago" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
 
 *This command queries  events with an "ip" of "192.168.0.1"*
 
-    curl -s --request GET --url "http://localhost:8080/event?ip=192.168.0.1" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
+curl -s --request GET --url "http://localhost:8080/event?ip=192.168.0.1" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
 
 ##### **Query on Both Variant and Invariant Fields:** 
 
 *This command queries   events with an "event_type" of "account_created" and a "location" of "Dubai"*
 
-
-    curl -s --request GET --url "http://localhost:8080/event?event_type=AccountCreated&location=Dubai" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
+curl -s --request GET --url "http://localhost:8080/event?event_type=AccountCreated&location=Dubai" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
 
  - This will return [] because there is an event_type of account_created
    but it was not created in Dubai
 
 *This command queries  events with an "event_type" of "billing" and an "currency" of 'AED'*
 
-    curl -s --request GET --url "http://localhost:8080/event?event_type=billing&event_specificdetails.currency=AED" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
-
+```
+curl -s --request GET --url "http://localhost:8080/event?event_type=billing&event_specificdetails.currency=AED" --header "Authorization: Bearer: $BEARER_TOKEN" | jq .
+```
 
 ## Dependencies
 
