@@ -4,6 +4,14 @@
 
 The **Audit Log Microservice API System** is a versatile and robust solution for recording and managing various types of events sent by other systems. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values. This service is write-intensive.
 
+Examples of events recorded:
+
+a new customer account was created for a given identity
+a customer performed an action on a resource
+a customer was billed a certain amount
+a customer account was deactivated
+The list of event types is open-ended, all events should contain a common set of fields and a set of fields specific to the event type. The code should not need to be modified for it to accept a new event type. Also note that this service is write-intensive.
+
 ## Technologies Used
 
 **Python:** Chose Python for its readability, extensive ecosystem, and ease of use, aligning with the project's goal of clean and maintainable code.
