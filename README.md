@@ -33,7 +33,7 @@ The list of event types is open-ended, all events should contain a common set of
 
 **Flask:** Utilized Flask as it's a lightweight Python web framework, perfect for building microservices like this one.
 
-**MongoDB:** Opted for MongoDB for its flexibility and scalability, fitting the open-ended event types and accommodating different data storage needs.
+**MongoDB:** Opted for MongoDBATLAS for its flexibility and scalability, fitting the open-ended event types and accommodating different data storage needs.
 
 **JWT (JSON Web Tokens):** Employed JWT for authentication to ensure secure access to event submission and querying endpoints, in line with the project's security focus.
 
