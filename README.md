@@ -169,7 +169,7 @@ Here is an sample of how it would look like:
 
 This schema ensures that all events must include the invariant data fields, guaranteeing a consistent structure. 
 
-## TESTING of Microservice API
+## Testing of Microservice API
 
 ### Prerequisites
 To run this project , the following is required:
