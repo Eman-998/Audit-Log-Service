@@ -41,7 +41,8 @@ def JWTtoken():
             try:
                 payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
 
-                # Verify expiration
+                # Verify Token validation using expiration
+                #TODO: Verifying the token's digital signature
                 expiration_str = payload['expiration']
                 expiration_dt = datetime.strptime(expiration_str, '%Y-%m-%dT%H:%M:%S.%f')
                 expiration_timestamp = int(expiration_dt.timestamp())

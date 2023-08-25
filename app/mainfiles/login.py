@@ -30,7 +30,7 @@ import jwt
 from datetime import datetime, timedelta
 from flask import jsonify, request, make_response 
 
-# Define a route for user login.
+# TODO: To enhance security, omplement password hashing
 def SignIn(app):
     @app.route('/login', methods=['POST'])
     def login():
@@ -50,8 +50,10 @@ def SignIn(app):
                 # Generate a JWT token.
                 token = jwt.encode(
                     {
+
+                        #TODO: Implement token refresh mechanisms to ensure continued access without requiring frequent logins
                         'user':data['username'],
-                        'expiration':(datetime.now() + timedelta(seconds=3600)).isoformat()
+                        'expiration':(datetime.now() + timedelta(seconds=1800)).isoformat()
                     },
                     app.config['SECRET_KEY'],
                     algorithm="HS256"

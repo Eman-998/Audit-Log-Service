@@ -16,7 +16,10 @@ from mainfiles.routes import main_bp
 app = Flask(__name__)
 
 
-# Get environment variables and pass them to the settings function
+#TODO: In a production environment, using a more robust configuration management system, 
+#      such as Python's configparser or third-party libraries like python-decouple, can provide
+#      better separation of configuration from code.
+
 app.config.from_object(__name__)
 
 # Load environment variables from .env file into Flask app

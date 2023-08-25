@@ -44,15 +44,6 @@ API Endpoint:
     API Endpoint:
         GET /event
 
-    Query Parameters:
-        - event_type (str, optional): Filter events by event type.
-        - username (str, optional): Filter events by username.
-        - entitytype (str, optional): Filter events by entity type.
-        - ip (str, optional): Filter events by IP address.
-        - location (str, optional): Filter events by location.
-        - description (str, optional): Filter events by description.
-        - timeStart (float, optional): Filter events with a timestamp greater than or equal to this value.
-        - timeEnd (float, optional): Filter events with a timestamp less than or equal to this value.
 """
 
 # Libraries
