@@ -1,5 +1,5 @@
 {
-  "title": "event-schema",
+  "title": "Schema",
   "type": "object",
   "properties": {
       "event_type": {

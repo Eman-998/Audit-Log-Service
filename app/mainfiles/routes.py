@@ -100,8 +100,8 @@ def POSTSERVICE(user_id):
           }
 
         # Use the passed mongo_client for database operations
-        db = current_app.mongo_client['audit_log_db']
-        collection = db['events'] 
+        db = current_app.mongo_client['AuditLog']
+        collection = db['results'] 
         
         # Store the message in MongoDB
         collection.insert_one(event)
@@ -124,68 +124,30 @@ def POSTSERVICE(user_id):
         return jsonify({
             "error": f"{e}"
         })
-        
+    
 @main_bp.route('/event', methods=['GET'])
 @JWTtoken()
 def GETSERVICE(user_id):
     try:
-        # Extract parameters and prepare for query
-        args = request.args
+        db = current_app.mongo_client['AuditLog']
+        collection = db['results']
+        
+        # Extract query parameters from the request
+        mongo_query = {}
+        for key, value in request.args.items():
+            mongo_query[key] = value
 
-        # Find our events table in MongoDB
-        db = current_app.mongo_client['audit_log_db']
-        collection = db['events']
+        # Construct the MongoDB query based on the query parameters
+        mongo_query['user_id'] = user_id
 
-        # Narrow down the results based on the parameters passed
-        query = {}
+        # Execute the MongoDB query
+        results = list(collection.find(mongo_query))
 
-        # Set event_type to the event_type argument.
-        if 'event_type' in args:
-            query['event_type'] = args['event_type']
+        for result in results:
+            result['_id'] = str(result['_id'])
 
-        # Set username to query. username
-        if 'username' in args:
-            query['username'] = args['username']
+        # Return the formatted results as a JSON response
+        return jsonify(results), 201
 
-        # Set the entity type of the query.
-        if 'entitytype' in args:
-            query['entitytype'] = args['entitytype']
-
-        # Set the ip of the query
-        if 'ip' in args:
-            query['ip'] = args['ip']
-
-        # Set the location of the query.
-        if 'location' in args:
-            query['location'] = args['location']
-
-        # Set the description of the query.
-        if 'description' in args:
-            query['description'] = args['description']
-
-        query['user_id'] = user_id
-
-        # Set the timestamp and start time
-        if 'timeStart' in args or 'timeEnd' in args:
-            timestamp_query = {}
-            # Set the time start time of the query
-            if 'timeStart' in args:
-                timestamp_query['$gte'] = float(args['timeStart'])
-            # Set the time end of the query
-            if 'timeEnd' in args:
-                timestamp_query['$lte'] = float(args['timeEnd'])
-            query['timestamp'] = timestamp_query
-
-        events = list(collection.find(query))
-
-        # Add the event id to the event s _id
-        for event in events:
-            event['_id'] = str(event['_id'])
-
-        response = jsonify(events)
-        response.indent = 2  
-        return response
-
-    # Return 500 if there was an error while trying to create a resource. \
     except Exception as e:
-        return make_response(json.dumps({"error": str(e)}), 500)
+        return jsonify({"error": str(e)}), 500
