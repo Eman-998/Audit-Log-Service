@@ -416,7 +416,7 @@ This is done through the requirements.txt which is deployed using Dockerfile whi
 
 **Flask**:
 
--   Rationale: Chosen for its simplicity and ease of use, making it suitable for rapid development.
+-   Rationale: Chosen for its simplicity and ease of use.
 -   Trade-offs: Limited built-in features compared to larger frameworks, but this aligns with the project's goal to avoid extensive frameworks.
 
 **MongoDB**:
@@ -426,16 +426,15 @@ This is done through the requirements.txt which is deployed using Dockerfile whi
 
 **JWT (JSON Web Tokens)**:
 
--   Rationale: Provides stateless authentication, enhancing security without the need for server-side sessions.
+-   Rationale: Provides stateless authentication, enhancing security without the need for server-side sessions. Chosen over Oauth2 since we dont need to maintain state.
 -   Trade-offs: Token management and revocation may be more complex for some use cases.
 
 **Docker**:
 
--   Rationale: Ensures consistency across environments and simplifies deployment.
+-   Rationale: Ensures consistency across environments and simplifies deployment. Allows containerization.
 -   Trade-offs: Slight overhead due to containerization, but this is outweighed by its benefits.
 
 **Gunicorn**:
-
 -   Rationale: Easy to set up and suitable for production environments.
 -   Trade-offs: Less suitable for development environments compared to lightweight servers like Waitress, but optimal for production use.
 
