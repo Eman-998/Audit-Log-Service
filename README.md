@@ -14,17 +14,31 @@
 
 ###### [Future Plans]
 
-## Project Description
+## Problem Prompt
+This is a technical assessment from Canonical.
 
-The **Audit Log Microservice API System** is a versatile and robust solution for recording and managing various types of events sent by other systems. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values. This service is write-intensive.
+Please build an audit log service. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values.
 
 Examples of events recorded:
 
-- a new customer account was created for a given identity
-- a customer performed an action on a resource
-- a customer was billed a certain amount
-- a customer account was deactivated
-  
+a new customer account was created for a given identity
+a customer performed an action on a resource
+a customer was billed a certain amount
+a customer account was deactivated
+The list of event types is open-ended, all events should contain a common set of fields and a set of fields specific to the event type. The code should not need to be modified for it to accept a new event type. Also, note that this service is write-intensive.
+
+Model an audit trail of events received from such services with a schema that captures the invariant data content along with the variant, event-specific content. Design and document a microservice API that can receive, store, and retrieve these events.
+
+The service should use authentication for the event submission and querying endpoints.
+
+The microservice must be developed in Python or Go and run as an HTTP server. Try to use features available in the language of your choice and avoid extensive usage of frameworks or generated code. Feel free to use any data storage mechanisms that you find appropriate.
+
+You are not expected to solve all possible operational and scalability issues. However, make sure to document important design and architecture decisions including the rationale and trade-offs. If you decide to take any shortcuts, make sure to leave TODO notes in the code with brief information on how these shortcuts can be addressed in the future. 
+
+
+## Project Description
+
+The **Audit Log Microservice API System** is a versatile and robust solution for recording and managing various types of events sent by other systems. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values. This service is write-intensive.
 The list of event types is open-ended, all events should contain a common set of fields and a set of fields specific to the event type. The code should not need to be modified for it to accept a new event type. Also note that this service is write-intensive.
 
 ## Technologies Used
