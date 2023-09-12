@@ -15,16 +15,20 @@
 ###### [Future Plans]
 
 ## Problem Prompt
-This is a technical assessment from Canonical.
+**This is a technical assessment from Canonical.**
 
 Please build an audit log service. The service will accept event data sent by other systems and provide an HTTP endpoint for querying recorded event data by field values.
 
 Examples of events recorded:
 
-a new customer account was created for a given identity
-a customer performed an action on a resource
-a customer was billed a certain amount
-a customer account was deactivated
+-> a new customer account was created for a given identity
+
+-> a customer performed an action on a resource
+
+-> a customer was billed a certain amount
+
+-> a customer account was deactivated
+
 The list of event types is open-ended, all events should contain a common set of fields and a set of fields specific to the event type. The code should not need to be modified for it to accept a new event type. Also, note that this service is write-intensive.
 
 Model an audit trail of events received from such services with a schema that captures the invariant data content along with the variant, event-specific content. Design and document a microservice API that can receive, store, and retrieve these events.
